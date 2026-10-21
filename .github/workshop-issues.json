@@ -1,0 +1,42 @@
+[
+  {
+    "title": "Add a dark mode toggle",
+    "labels": ["good first issue", "hacktoberfest", "site"],
+    "body": "The wall only has a light theme.\n\n**What to do**\n- Add a small toggle button next to the search box in `app/src/components/Wall.jsx`.\n- Define dark values for the CSS variables in `app/src/app/globals.css` (for example under `[data-theme=\"dark\"]`).\n- Remember the choice in `localStorage` (wrap it in `try/catch`).\n\n**Done when** the whole page is readable in both themes and the choice survives a reload."
+  },
+  {
+    "title": "Show a \"NEW\" badge on cards added in the last 24 hours",
+    "labels": ["good first issue", "hacktoberfest", "site"],
+    "body": "Newcomers should be easy to spot.\n\n**What to do**\n- In `app/scripts/collect-profiles.mjs`, find when each folder was added (for example with `git log --diff-filter=A --format=%cI -- profiles/<name>`) and store it as `addedAt`.\n- In `Wall.jsx`, show a small yellow `NEW` chip on cards whose `addedAt` is within 24 hours of the build.\n\n**Heads up:** Vercel clones with limited history, so fall back gracefully when git history isn't available."
+  },
+  {
+    "title": "Add a sort dropdown: A–Z, Z–A, newest first",
+    "labels": ["good first issue", "hacktoberfest", "site"],
+    "body": "Cards are always sorted A–Z.\n\n**What to do**\n- Add a `<select>` next to the search box in `Wall.jsx`.\n- Sort the visible profiles by the chosen option. \"Newest first\" can wait until the NEW-badge issue adds `addedAt`, so start with A–Z and Z–A.\n\n**Done when** sorting and search work together."
+  },
+  {
+    "title": "Filter the wall by emoji",
+    "labels": ["good first issue", "hacktoberfest", "site"],
+    "body": "Everyone picks an emoji in their `bio.md`. Let's use it.\n\n**What to do**\n- Collect the distinct emojis from all profiles in `Wall.jsx`.\n- Show them as a row of clickable chips under the search box. Clicking one filters the wall; clicking it again clears the filter.\n\n**Done when** filtering works together with search."
+  },
+  {
+    "title": "Add a \"copy profile link\" button on profile pages",
+    "labels": ["good first issue", "hacktoberfest", "site"],
+    "body": "People want to share their card.\n\n**What to do**\n- On `app/src/app/u/[username]/page.jsx`, add a button that copies the page URL with `navigator.clipboard.writeText`.\n- It needs to be a client component (`\"use client\"`). Show \"Copied!\" for two seconds after clicking.\n\n**Done when** it works on desktop and mobile."
+  },
+  {
+    "title": "Show a random contributor with a \"Surprise me\" button",
+    "labels": ["good first issue", "hacktoberfest", "site"],
+    "body": "A fun way to meet people at the meetup.\n\n**What to do**\n- Add a \"Surprise me\" button on the home page that navigates to a random `/u/<username>` page.\n\n**Done when** repeated clicks visit different people (when there are more than one)."
+  },
+  {
+    "title": "Improve the empty-search message",
+    "labels": ["good first issue", "hacktoberfest", "site"],
+    "body": "When a search matches nobody, the wall just says \"No one matches\".\n\n**What to do**\n- Add a \"Clear search\" button inside that message in `Wall.jsx`.\n- Bonus: if the search looks like a GitHub username, suggest \"Not on the wall yet? Add your card →\" linking to `#join`."
+  },
+  {
+    "title": "Add Open Graph image and metadata so shared links look good",
+    "labels": ["good first issue", "hacktoberfest", "site"],
+    "body": "Links shared on WhatsApp or LinkedIn show no preview.\n\n**What to do**\n- Add `openGraph` metadata in `app/src/app/layout.jsx` and on profile pages (`generateMetadata`).\n- Use Next.js `opengraph-image.jsx` (with `ImageResponse`) to render a card with the person's name on the Hacktoberfest background color `#e4e5da`.\n\n**Done when** the preview shows up in a link-preview checker."
+  }
+]
