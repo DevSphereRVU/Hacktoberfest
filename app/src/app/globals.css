@@ -248,3 +248,14 @@ footer {
   .count { justify-self: start; }
   .profile-card { grid-template-columns: 1fr; }
 }
+
+/* ---------- PR timings ---------- */
+.prtime { margin:0; font-size:12px; line-height:1.5; color:var(--ink); display:flex; flex-wrap:wrap; align-items:center; gap:2px 6px; font-weight:400; }
+.prtime .dot { width:8px; height:8px; border-radius:50%; background:#2e7d4f; display:inline-block; }
+.prtime b { font-weight:700; }
+.prtime .took { flex-basis:100%; color:var(--ink-soft); font-weight:300; padding-left:14px; }
+.sortnote { font-size:12.5px; color:var(--ink-soft); }
+.timeline { margin:18px 0 0; display:grid; gap:6px; font-size:13.5px; }
+.timeline div { display:grid; grid-template-columns:120px 1fr; gap:10px; }
+.timeline dt { color:var(--ink-soft); font-weight:400; }
+.timeline dd { margin:0; }

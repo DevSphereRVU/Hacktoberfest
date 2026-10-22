@@ -13,6 +13,8 @@ export const IMAGE_EXTS = [".jpg", ".jpeg", ".png", ".webp"];
 export const BIO_EXTS = [".md", ".txt"];
 const USERNAME_RE = /^[A-Za-z0-9](?:[A-Za-z0-9-]{0,38})$/;
 const LINK_KEYS = ["github", "linkedin", "x", "website", "instagram"];
+const NO_EVAL = () => { throw new Error("only YAML front matter is allowed"); };
+const SAFE_ENGINES = { js: NO_EVAL, javascript: NO_EVAL, coffee: NO_EVAL, coffeescript: NO_EVAL, cson: NO_EVAL };
 
 export function listProfileFolders() {
   if (!fs.existsSync(PROFILES_DIR)) return [];
@@ -50,7 +52,11 @@ export function readProfile(folder) {
   let body = "";
   try {
     const raw = fs.readFileSync(path.join(dir, bioFile), "utf8");
-    const parsed = matter(raw);
+    // Only plain YAML front matter is allowed. gray-matter can run JavaScript for "---js" blocks,
+    // so anything other than a bare "---" opening line is rejected before parsing.
+    const first = raw.replace(/^\uFEFF/, "").split(/\r?\n/, 1)[0];
+    if (first.startsWith("---") && first.trim() !== "---") throw new Error(`the first line must be exactly ---`);
+    const parsed = matter(raw, { language: "yaml", engines: SAFE_ENGINES });
     data = parsed.data || {};
     body = parsed.content || "";
   } catch (e) {

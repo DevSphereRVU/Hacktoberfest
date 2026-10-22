@@ -1,0 +1,88 @@
+name: Wall bot
+
+# Checks profile pull requests and merges them automatically when everything is fine.
+#
+# Security model:
+# - pull_request_target runs this file and the scripts from the BASE branch (main),
+#   never from the pull request, so a PR cannot change what the bot does.
+# - The PR's files are downloaded as data through the GitHub API. Nothing from the PR is executed.
+# - Only PRs that touch nothing but profiles/<PR author>/ are ever merged.
+# - The merge is pinned to the exact commit that was checked.
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened, ready_for_review, labeled, unlabeled]
+    branches: [main]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: wall-bot-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  check-and-merge:
+    if: ${{ !github.event.pull_request.draft }}
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      REPO: ${{ github.repository }}
+      PR_NUMBER: ${{ github.event.pull_request.number }}
+      PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+      HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+      HEAD_REPO: ${{ github.event.pull_request.head.repo.full_name }}
+      SITE_URL: ${{ vars.SITE_URL }}
+      HOLD: ${{ contains(github.event.pull_request.labels.*.name, 'hold') }}
+    steps:
+      - name: Check out main (trusted code only)
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          persist-credentials: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: app/package-lock.json
+
+      - name: Install
+        working-directory: app
+        run: npm ci
+
+      - name: Check the profile
+        id: check
+        working-directory: app
+        run: node scripts/pr-bot.mjs check
+
+      - name: Make sure the site still builds with this profile
+        id: build
+        if: steps.check.outputs.kind == 'profile' && steps.check.outputs.ok == 'true'
+        working-directory: app
+        env:
+          PROFILES_DIR: ${{ steps.check.outputs.profiles_dir }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npm run build
+
+      - name: Note a failed build
+        if: failure() && steps.build.outcome == 'failure'
+        working-directory: app
+        run: node scripts/pr-bot.mjs buildfail
+
+      - name: Merge
+        if: >-
+          steps.check.outputs.kind == 'profile' && steps.check.outputs.ok == 'true' &&
+          steps.build.outcome == 'success' && !contains(github.event.pull_request.labels.*.name, 'hold')
+        working-directory: app
+        run: node scripts/pr-bot.mjs merge
+
+      - name: Tell the contributor
+        if: always() && steps.check.outcome == 'success'
+        working-directory: app
+        run: node scripts/pr-bot.mjs comment
+
+      - name: Fail the check when the profile needs fixes
+        if: steps.check.outputs.kind == 'profile' && steps.check.outputs.ok != 'true'
+        run: exit 1

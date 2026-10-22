@@ -85,11 +85,10 @@ git push origin main
 
 Go to your fork on GitHub. Click **Contribute → Open pull request** (or the **Compare & pull request** button), fill in the template, and click **Create pull request**.
 
-Then watch for:
+Then the **wall bot** takes over:
 
-- ✅ **Check profile**: an automatic check that your folder follows the rules. If it's red, click **Details** to see what to fix, fix it, then commit and push again. The PR updates itself.
-- 🔗 **Vercel preview**: a link to a copy of the site with *your* card on it.
-- 🎉 **Merged**: a maintainer merges it, the site redeploys, and you're on the wall.
+- ✅ If your folder follows the rules, the bot merges your PR by itself and comments with a link. The site redeploys and you're on the wall in about a minute.
+- ❌ If something's off, the bot comments with exactly what to fix. Fix it, commit and push again: the PR updates itself and the bot checks again.
 
 ---
 
@@ -127,5 +126,15 @@ Look at the [issues labelled `good first issue`](../../issues?q=is%3Aissue+is%3A
 - The site is in `app/` and deploys on Vercel with **Root Directory = `app`**. Every merge to `main` redeploys it.
 - At build time `app/scripts/collect-profiles.mjs` reads `profiles/`, copies photos into `public/photos/` and writes `src/generated/profiles.json`. A broken profile is **skipped with a warning**, so one bad folder never takes the site down.
 - A profile folder holds one `.md` bio (any name) and at most one photo (any name). An optional `github:` field links the card to a different GitHub account than the folder name, as `test-user` does.
-- The **Check profile** workflow runs `app/scripts/validate-profiles.mjs` on every PR. It makes sure a workshop PR only touches `profiles/<PR author>/`, and that the bio and photo follow the rules above.
+- **The wall bot** (`.github/workflows/auto-merge.yml` + `app/scripts/pr-bot.mjs`) checks every PR and **auto-merges** profile PRs that pass:
+  - It runs on `pull_request_target`, so it runs straight away even for first-time contributors, using the scripts from `main`. It never runs code from the PR: it downloads the PR's profile files through the API as data.
+  - It only merges PRs that touch nothing but `profiles/<PR author>/`, and merges exactly the commit it checked.
+  - It rejects bios that try to run code (`---js` front matter), photos over 1 MB, extra files, and wrong folder names, and comments the fix on the PR.
+  - Words in `.github/blocked-words.txt` stop the auto-merge so a human can look. Add a `hold` label to any PR to stop the bot merging it.
+  - PRs that change the site code get a "a maintainer will review this" comment, and `.github/workflows/ci.yml` builds them.
+- **PR timings on the wall:** at build time `app/scripts/pr-times.mjs` asks the GitHub API when each person's PR was opened and merged (the bot labels those PRs `wall`) and shows it on their card, newest merges first, in IST. If GitHub can't be reached the site still builds, just without timings. On Vercel, optionally add an environment variable `GITHUB_TOKEN` (a fine-grained token with read-only access to public repos) to raise the API limit from 60 to 5,000 calls an hour.
+- **One-time setup for the bot:**
+  1. Settings → Actions → General → Workflow permissions → **Read and write permissions**.
+  2. Don't add a branch protection rule on `main` that requires reviews, or the bot can't merge.
+  3. Optional: Settings → Secrets and variables → Actions → Variables → add `SITE_URL` (your Vercel link) so the bot's comment links to each new card.
 - Run locally: `cd app && npm install && npm run dev`, then open http://localhost:3000.

@@ -40,6 +40,13 @@ export default async function ProfilePage({ params }) {
             </h2>
             {p.role && <p className="role" style={{ fontSize: 15 }}>{p.role}</p>}
             <p className="bio">{p.bio}</p>
+            {p.pr && (
+              <dl className="timeline">
+                <div><dt>PR opened</dt><dd>{p.pr.openedDay}, <b>{p.pr.openedClock}</b> IST</dd></div>
+                <div><dt>Merged</dt><dd>{p.pr.mergedDay}, <b>{p.pr.mergedClock}</b> IST</dd></div>
+                <div><dt>Time to merge</dt><dd><b>{p.pr.took}</b> · <a href={p.pr.url} target="_blank" rel="noopener noreferrer">PR #{p.pr.number} ↗</a></dd></div>
+              </dl>
+            )}
             <div className="links">
               {Object.entries(links).map(([k, url]) => (
                 <a key={k} className="chip" href={url} target="_blank" rel="noopener noreferrer nofollow">

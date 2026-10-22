@@ -25,6 +25,7 @@ export default function Wall({ profiles }) {
           onChange={(e) => setQ(e.target.value)}
           aria-label="Search contributors"
         />
+        <span className="sortnote">Newest merges first</span>
         <a className="btn" href="#join">
           Add your card →
         </a>
@@ -48,6 +49,13 @@ export default function Wall({ profiles }) {
               </div>
             </div>
             <p className="bio">{p.bio.length > 160 ? p.bio.slice(0, 157) + "…" : p.bio}</p>
+            {p.pr && (
+              <p className="prtime" title={`PR #${p.pr.number} opened ${p.pr.openedDay} ${p.pr.openedClock}, merged ${p.pr.mergedDay} ${p.pr.mergedClock} IST`}>
+                <span className="dot" />
+                PR #{p.pr.number} · merged <b>{p.pr.mergedClock}</b> IST
+                <span className="took">opened {p.pr.openedClock} · {p.pr.took} to merge</span>
+              </p>
+            )}
             <div className="handle">
               <span>@{p.github}</span>
               {p.emoji && <span className="emoji">{p.emoji}</span>}
