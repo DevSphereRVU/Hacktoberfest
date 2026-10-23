@@ -1,9 +1,8 @@
 ---
-name: Samarth
-role: AI Engineer @ Hoogway
-emoji: 🚀
-github: IamSamk
+name: Ritam
+role: Your moms husband
+emoji: 💦
+github: RitamRoa
 ---
-Hey, I'm Samarth! I build AI agents at Hoogway and I'm working towards my
-Google Cloud Associate Cloud Engineer certification. I'm running today's
-hands-on workshop. Copy this folder, make it yours, and open a pull request.
+Hey, I'm Ritam, I like to be your moms husband. She loves me, she loves me a lot.
+I like to be your manage your wealth as much as i like to manage your mom at night.
