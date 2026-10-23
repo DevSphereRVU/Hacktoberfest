@@ -1,4 +1,4 @@
-export default function Hero({ kicker, title, subtitle, count }) {
+export default function Hero({ kicker, title, subtitle, count, extra }) {
   return (
     <header className="hero">
       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -6,7 +6,9 @@ export default function Hero({ kicker, title, subtitle, count }) {
       <div className="hero-inner">
         <div>
           {kicker && <p className="kicker">{kicker}</p>}
-          <h1 className="title">{title}</h1>
+          <h1 className="title" style={{ display: "flex", alignItems: "center", gap: 0, flexWrap: "wrap" }}>
+            {title}{extra}
+          </h1>
           {subtitle && <p className="subtitle">{subtitle}</p>}
         </div>
         {typeof count === "number" && (

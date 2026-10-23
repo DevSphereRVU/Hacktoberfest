@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Hero from "@/components/Hero";
 import Avatar from "@/components/Avatar";
 import { getProfile, getProfiles, REPO_URL } from "@/lib/profiles";
+import MoneyRain from "@/components/MoneyRain";
 
 export const dynamicParams = false;
 
@@ -27,7 +28,7 @@ export default async function ProfilePage({ params }) {
 
   return (
     <>
-      <Hero kicker="Hacktoberfest 2026 · RVU Contributors Wall" title={p.name} />
+      <Hero kicker="Hacktoberfest 2026 · RVU Contributors Wall" title={p.name} extra={username === "RitamRoa" ? <MoneyRain /> : null} />
       <main className="profile">
         <Link className="back" href="/">
           ← Back to the wall
