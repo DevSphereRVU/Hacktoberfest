@@ -1,6 +1,6 @@
 # 🧱 The RVU Contributors Wall · Hacktoberfest 2026
 
-Every card on the wall is a merged pull request.
+Every card on the wall is a merged pull request.  
 Built for the **DevSphere × FOSS RVU** Hacktoberfest meetup at RV University, Bengaluru (23 October 2026).
 
 **Live site:** _link appears here once it's deployed on Vercel_
@@ -19,6 +19,31 @@ Hacktoberfest/
 
 ---
 
+## 🤔 Wait, what even is Hacktoberfest?
+
+Hacktoberfest is a month-long event every October where developers worldwide contribute to open-source projects on GitHub. You make pull requests (PRs), maintainers review and merge them, and you get to say you've done open-source — which, trust me, looks really good on your resume.
+
+This project is our version of it at RVU. Instead of contributing to some random repo you've never heard of, you're adding yourself to **a live website** that the whole community can see. Same concept, more fun.
+
+---
+
+## 🧠 Quick Git/GitHub crash course (read this if you're lost)
+
+If you've only ever used GitHub to download zip files, that's okay. Here's the mental model:
+
+- **Git** = a tool that lives on your computer. It tracks changes in your code like a really detailed Ctrl+Z history.
+- **GitHub** = a website that stores your Git projects online so others can see and contribute to them.
+- **Repository (repo)** = a project folder that Git is tracking.
+- **Fork** = your own personal copy of someone else's repo on GitHub. You can mess with it freely.
+- **Clone** = downloading that fork to your laptop so you can actually edit files.
+- **Commit** = saving a snapshot of your changes with a message like "added my profile".
+- **Push** = uploading those saved changes back to GitHub.
+- **Pull Request (PR)** = telling the original repo's owner "hey, I made changes, can you merge them in?"
+
+That's literally the whole flow. Fork → Clone → Edit → Commit → Push → PR.
+
+---
+
 ## Add yourself in 5 minutes
 
 > **New to Git?** That's the whole point of today. Follow along step by step.
@@ -34,14 +59,20 @@ Check it worked:
 git --version
 ```
 
+> You should see something like `git version 2.x.x`. If you get `command not found`, Git isn't installed yet.
+
 ### 1. Fork, then clone your fork
 
-Click **Fork** (top right of this page). You now have your own copy at `github.com/YOUR-USERNAME/Hacktoberfest`. Clone **your fork**:
+Click **Fork** (top right of this page). GitHub will create a copy of this repo under your account at `github.com/YOUR-USERNAME/Hacktoberfest`.
+
+Now clone **your fork** (not the original):
 
 ```bash
 git clone https://github.com/YOUR-USERNAME/Hacktoberfest.git
 cd Hacktoberfest
 ```
+
+> ⚠️ A very common mistake: people clone the original repo and then wonder why they can't push. Always clone **your fork**.
 
 ### 2. Copy the example folder
 
@@ -50,45 +81,69 @@ cd profiles
 cp -r test-user YOUR-USERNAME
 ```
 
-Your folder name **must be your GitHub username** (same spelling). Then open it in your editor:
+Your folder name **must be your GitHub username** (same spelling, same case). Then open it in your editor:
 
-- Rename `test_bio.md` to `bio.md` and write about yourself.
-- Delete `test.jpg` and drop in your own photo (`.jpg`, `.png` or `.webp`, up to 5 MB). No photo? We'll use your GitHub avatar.
+- Rename `test_bio.md` → `bio.md`
+- Write a short intro about yourself in `bio.md`
+- Delete `test.jpg` and drop in your own photo (`.jpg`, `.png` or `.webp`, up to 5 MB). No photo? No worries — we'll use your GitHub avatar automatically.
+
+Your `bio.md` should look like this:
 
 ```markdown
 ---
-name: Samarth
-role: AI Engineer @ Hoogway
-emoji: 🚀
+name: Deshnaa Suresh
+role: 2nd Year CSE @ RVU
+emoji: 💻
+links:
+  github: https://github.com/deshnaas
+  linkedin: https://linkedin.com/in/yourprofile
 ---
-I build AI agents and occasionally break them on purpose.
+Hey! I'm a 2nd year CSE student at RVU. I like building things and breaking them equally.
+This is my first open-source contribution and honestly it's not as scary as I thought.
 ```
+
+**Fields you can fill in:**
 
 | Field | Required | Limit |
 |---|---|---|
-| `name` | yes | 40 characters |
+| `name` | ✅ yes | 40 characters |
 | `role` | no | 60 characters |
 | `emoji` | no | one emoji |
 | `links` | no | `github`, `linkedin`, `x`, `website`, `instagram` (full `https://` URLs) |
-| text under the `---` | yes | 400 characters |
+| text under the `---` | ✅ yes | 400 characters |
 
 ### 3. Check, commit, push
 
+Before committing, check what files you've changed:
+
 ```bash
 git status
+```
+
+You should see your new folder under `profiles/YOUR-USERNAME/`. Then:
+
+```bash
 git add .
 git commit -m "Add YOUR-USERNAME to the wall"
 git push origin main
 ```
 
+> **What does `git add .` do?** It stages all your changes — tells Git "include these in the next snapshot." Think of it like selecting files before hitting save.
+
 ### 4. Open a pull request
 
-Go to your fork on GitHub. Click **Contribute → Open pull request** (or the **Compare & pull request** button), fill in the template, and click **Create pull request**.
+Go to your fork on GitHub (`github.com/YOUR-USERNAME/Hacktoberfest`). You should see a yellow banner saying **"Compare & pull request"** — click it. Fill in the template and hit **Create pull request**.
 
 Then the **wall bot** takes over:
 
-- ✅ If your folder follows the rules, the bot merges your PR by itself and comments with a link. The site redeploys and you're on the wall in about a minute.
-- ❌ If something's off, the bot comments with exactly what to fix. Fix it, commit and push again: the PR updates itself and the bot checks again.
+- ✅ If your folder follows the rules, the bot merges your PR by itself and comments with a link. The site redeploys and you're on the wall in about **60 seconds**.
+- ❌ If something's off, the bot comments with exactly what to fix. Just fix it, commit and push again — the PR updates automatically and the bot re-checks.
+
+---
+
+## 🎉 Congrats, you just did open source
+
+Seriously. That's it. You forked a repo, made a change, and opened a pull request — that's what open-source contribution looks like. The repos that keep the internet running (Linux, Node.js, VS Code) work exactly this way, just with more files and more people arguing in the comments.
 
 ---
 
@@ -102,22 +157,35 @@ cd my-git-project
 git status
 ```
 
+This initializes a new empty repository. From here you can start making commits, and later connect it to a GitHub repo with `git remote add origin <your-repo-url>`.
+
+---
+
 ## No Git installed?
 
-Press `.` on this repo page to open **github.dev** (VS Code in your browser). You can create your folder and file there and commit to your fork, then open a PR. Same result, no install.
+Press `.` on this repo page to open **github.dev** (VS Code in your browser). You can create your folder and file there and commit to your fork, then open a PR. Same result, no install needed.
 
-## Stuck?
+---
+
+## 🆘 Stuck?
 
 | You see | Do this |
 |---|---|
 | `Support for password authentication was removed` | Run `gh auth login`, or create a personal access token and use it as the password |
 | `Permission denied` / `403` | You cloned the original repo instead of your fork. Clone `github.com/YOUR-USERNAME/Hacktoberfest` |
 | `! [rejected] … (fetch first)` | `git pull origin main`, then push again |
-| The check says the folder name is wrong | Rename it to your exact GitHub username: `git mv profiles/old profiles/NEW` |
+| The check says the folder name is wrong | Rename it to your exact GitHub username: `git mv profiles/old-name profiles/your-exact-username` |
+| Nothing is happening after `git push` | Check that you're pushing to `origin main` and not some other branch |
+
+Still stuck? Just ask anyone with a lanyard at the event. That's literally why we're here.
+
+---
 
 ## Finished early? Improve the site
 
 Look at the [issues labelled `good first issue`](../../issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22). They're real features for this website (dark mode, filters, a "Surprise me" button…). Comment on one to claim it before you start.
+
+These are actual coding contributions — components, scripts, a bit of CSS. If you've done Web Dev in your curriculum already, this is fair game.
 
 ---
 
