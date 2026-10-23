@@ -53,7 +53,7 @@ cp -r test-user YOUR-USERNAME
 Your folder name **must be your GitHub username** (same spelling). Then open it in your editor:
 
 - Rename `test_bio.md` to `bio.md` and write about yourself.
-- Delete `test.jpg` and drop in your own photo (`.jpg`, `.png` or `.webp`, under 1 MB). No photo? We'll use your GitHub avatar.
+- Delete `test.jpg` and drop in your own photo (`.jpg`, `.png` or `.webp`, up to 5 MB). No photo? We'll use your GitHub avatar.
 
 ```markdown
 ---
@@ -129,7 +129,7 @@ Look at the [issues labelled `good first issue`](../../issues?q=is%3Aissue+is%3A
 - **The wall bot** (`.github/workflows/auto-merge.yml` + `app/scripts/pr-bot.mjs`) checks every PR and **auto-merges** profile PRs that pass:
   - It runs on `pull_request_target`, so it runs straight away even for first-time contributors, using the scripts from `main`. It never runs code from the PR: it downloads the PR's profile files through the API as data.
   - It only merges PRs that touch nothing but `profiles/<PR author>/`, and merges exactly the commit it checked.
-  - It rejects bios that try to run code (`---js` front matter), photos over 1 MB, extra files, and wrong folder names, and comments the fix on the PR.
+  - It rejects bios that try to run code (`---js` front matter), photos over 5 MB, extra files, and wrong folder names, and comments the fix on the PR.
   - Words in `.github/blocked-words.txt` stop the auto-merge so a human can look. Add a `hold` label to any PR to stop the bot merging it.
   - PRs that change the site code get a "a maintainer will review this" comment, and `.github/workflows/ci.yml` builds them.
 - **PR timings on the wall:** at build time `app/scripts/pr-times.mjs` asks the GitHub API when each person's PR was opened and merged (the bot labels those PRs `wall`) and shows it on their card, newest merges first, in IST. If GitHub can't be reached the site still builds, just without timings. On Vercel, optionally add an environment variable `GITHUB_TOKEN` (a fine-grained token with read-only access to public repos) to raise the API limit from 60 to 5,000 calls an hour.

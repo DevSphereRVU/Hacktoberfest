@@ -72,7 +72,8 @@ async function check() {
     fs.mkdirSync(path.join(scratch, folder), { recursive: true });
     for (const item of listing) {
       if (item.type !== "file") { problems.push(`\`profiles/${folder}/${item.name}\` is a folder. Keep your files directly inside \`profiles/${folder}/\`.`); continue; }
-      if (item.size > 2 * 1024 * 1024) { problems.push(`\`profiles/${folder}/${item.name}\` is too big (${(item.size / 1048576).toFixed(1)} MB).`); continue; }
+      // Don't download anything far over the photo limit (5 MB, checked properly in profile-rules.mjs).
+      if (item.size > 6 * 1024 * 1024) { problems.push(`\`profiles/${folder}/${item.name}\` is ${(item.size / 1048576).toFixed(1)} MB. Photos can be up to 5 MB.`); continue; }
       if (!/^[\w.-]+$/.test(item.name)) { problems.push(`\`profiles/${folder}/${item.name}\`: use only letters, numbers, dots, dashes and underscores in file names.`); continue; }
       const raw = await gh(`/repos/${HEAD_REPO}/contents/profiles/${encodeURIComponent(folder)}/${encodeURIComponent(item.name)}?ref=${HEAD_SHA}`,
         { headers: { Accept: "application/vnd.github.raw" } });

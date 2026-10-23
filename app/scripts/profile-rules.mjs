@@ -8,7 +8,7 @@ export const PROFILES_DIR = process.env.PROFILES_DIR
   ? path.resolve(process.env.PROFILES_DIR)
   : path.resolve(path.dirname(new URL(import.meta.url).pathname), "../../profiles");
 
-export const LIMITS = { name: 40, role: 60, bio: 400, imageBytes: 1024 * 1024 };
+export const LIMITS = { name: 40, role: 60, bio: 400, imageBytes: 5 * 1024 * 1024 };
 export const IMAGE_EXTS = [".jpg", ".jpeg", ".png", ".webp"];
 export const BIO_EXTS = [".md", ".txt"];
 const USERNAME_RE = /^[A-Za-z0-9](?:[A-Za-z0-9-]{0,38})$/;
@@ -94,7 +94,7 @@ export function readProfile(folder) {
   const image = images.sort()[0] || null;
   if (image) {
     const size = fs.statSync(path.join(dir, image)).size;
-    if (size > LIMITS.imageBytes) errors.push(`${image} is ${(size / 1048576).toFixed(1)} MB, the limit is 1 MB.`);
+    if (size > LIMITS.imageBytes) errors.push(`${image} is ${(size / 1048576).toFixed(1)} MB, the limit is ${LIMITS.imageBytes / 1048576} MB.`);
   }
   for (const f of files) {
     if (![...BIO_EXTS, ...IMAGE_EXTS].includes(ext(f))) {
